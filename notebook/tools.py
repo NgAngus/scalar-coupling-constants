@@ -57,7 +57,7 @@ def get_portion(df, r=0.01):
 	return df[df.molecule_name.isin(mols[:int(len(mols) * r)])].copy()
 
 
-	# From: https://www.kaggle.com/seriousran/just-speed-up-calculate-distance-from-benchmark
+# From: https://www.kaggle.com/seriousran/just-speed-up-calculate-distance-from-benchmark
 def map_atom_info(df, df_structures, atom_idx):
 	df = pd.merge(df, df_structures, how = 'left',
 				  left_on  = ['molecule_name', f'atom_index_{atom_idx}'],
@@ -131,16 +131,14 @@ def importances(feats, model):
 						columns=['importance']).sort_values('importance')[::-1]
 
 
-def encode_cols(df, cols, drop=True):
+def encode_cols(df, cols):
 	if not cols:
 		print('No columns given to encode.')
 		return df
 	for c in cols:
 		encoded = pd.get_dummies(df[c], prefix=c, sparse=True)
 		df = df.join(encoded)
-	if drop:
-		return df.drop(cols, axis=1)
-	return df
+	return df.drop(cols, axis=1)
 
 
 def get_nth_mindist(df, n=2, atom_index=0):
@@ -217,7 +215,7 @@ def save_model(model, fname):
 def constant_model(X, y, feats, constant, verbose=True, cv=True):
     if verbose:
         print('TARGET:', constant)
-    print(f'FEATURES (n = {len(X.columns)}):')
+    print(f'FEATURES (n = {len(feats)}):')
     plist(feats)
     print(75*'-')
     print(f'Returning model to generate {constant}.')
@@ -243,3 +241,5 @@ def select_features(model, X, y, feats, threshold=0.0001):
     feats_selected = list(compress(feats, sfm.get_support()))
     print(feats_selected)
     return feats_selected
+
+    
