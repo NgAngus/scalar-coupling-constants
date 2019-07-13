@@ -221,9 +221,9 @@ def constant_model(X, y, feats, constant, verbose=True, cv=True):
     print(f'Returning model to generate {constant}.')
     rf = RandomForestRegressor(n_jobs=-1)
     if cv:
-        gss = GroupShuffleSplit(n_splits=3)
+        gss = GroupKFold(n_splits=3)
         scores = cross_val_score(rf, X[feats], y, scoring='neg_mean_absolute_error', groups=X['molecule_name'], cv=gss, n_jobs=-1)
-        print(np.mean(np.log(-scores)))
+        print("CV-score", np.mean(np.log(-scores)))
     rf.fit(X[feats], y)
     return rf
 
